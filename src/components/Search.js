@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
 
 const Search = () => {
 	const [term, setTerm] = useState('');
 	const [results, setResults] = useState([]);
-
-	console.log(results);
 
 	useEffect(() => {
 		const search = async () => {
@@ -25,6 +28,20 @@ const Search = () => {
 		}
 	}, [term]);
 
+	const renderedResults = results.map((result) => {
+		return (
+			<div key={result.pageid} className='item'>
+				<div className='content'>
+					<div className='header'>{result.title}</div>
+					<span
+						dangerouslySetInnerHTML={{
+							__html: DOMPurify.sanitize(result.snippet),
+						}}></span>
+				</div>
+			</div>
+		);
+	});
+
 	return (
 		<div className='ui form'>
 			<div className='field'>
@@ -35,6 +52,7 @@ const Search = () => {
 					onChange={(e) => setTerm(e.target.value)}
 				/>
 			</div>
+			<div className='ui celled list'>{renderedResults}</div>
 		</div>
 	);
 };
