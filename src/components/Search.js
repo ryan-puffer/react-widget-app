@@ -23,12 +23,14 @@ const Search = () => {
 			});
 			setResults(data.query.search);
 		};
+
+		//delay request until user stops typing
 		const timeoutId = setTimeout(() => {
 			if (term) {
 				search();
 			}
 		}, 500);
-
+		//clear timeout when user types
 		return () => {
 			clearTimeout(timeoutId);
 		};
