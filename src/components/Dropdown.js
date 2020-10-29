@@ -5,13 +5,20 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
 	const ref = useRef();
 
 	useEffect(() => {
-		document.body.addEventListener('click', (event) => {
+		const onBodyClick = (event) => {
 			//if click is outside dropdown menu, close dropdown
 			if (ref.current && ref.current.contains(event.target)) {
 				return;
 			}
 			setOpen(false);
-		});
+		};
+		//set up listener for a click on the body
+		document.body.addEventListener('click', onBodyClick);
+
+		//clean up click listener so it doesn't screw anything up
+		return () => {
+			document.body.removeEventListener('click', onBodyClick);
+		};
 	}, []);
 
 	const renderedOptions = options.map((option) => {
