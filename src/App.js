@@ -38,7 +38,7 @@ export default () => {
 	const [showDropdown, setShowDropdown] = useState(true);
 
 	return (
-		<div>
+		<div className='ui container'>
 			<button
 				onClick={() => {
 					setShowDropdown(!showDropdown);

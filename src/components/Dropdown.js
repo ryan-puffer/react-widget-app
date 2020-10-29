@@ -37,7 +37,7 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
 	});
 
 	return (
-		<div ref={ref} className='ui form'>
+		<div ref={ref} className='ui form container'>
 			<div className='field'>
 				<label className='label'>Select A Color</label>
 				{/* if selected hide option in menu */}
@@ -52,6 +52,7 @@ const Dropdown = ({ options, selected, onSelectedChange }) => {
 					</div>
 				</div>
 			</div>
+			<p style={{ color: selected.value }}>This text is {selected.label}. </p>
 		</div>
 	);
 };
