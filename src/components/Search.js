@@ -8,8 +8,22 @@ const DOMPurify = createDOMPurify(window);
 
 const Search = () => {
 	const [term, setTerm] = useState('');
+	const [debouncedTerm, setDebouncedTerm] = useState(term);
 	const [results, setResults] = useState([]);
 
+	//runs on first render and anytime term updates - term updates whenever a user types into input
+	useEffect(() => {
+		//set debouncedTerm after waiting half a second
+		const timerId = setTimeout(() => {
+			setDebouncedTerm(term);
+		}, 500);
+
+		return () => {
+			clearTimeout(timerId);
+		};
+	}, [term]);
+
+	//runs on first render and anytime debouncedTerm updates
 	useEffect(() => {
 		const search = async () => {
 			const { data } = await axios.get('https://en.wikipedia.org/w/api.php', {
@@ -18,23 +32,15 @@ const Search = () => {
 					list: 'search',
 					origin: '*',
 					format: 'json',
-					srsearch: term,
+					srsearch: debouncedTerm,
 				},
 			});
+			//update results with response
 			setResults(data.query.search);
 		};
-
-		//delay request until user stops typing
-		const timeoutId = setTimeout(() => {
-			if (term) {
-				search();
-			}
-		}, 500);
-		//clear timeout when user types
-		return () => {
-			clearTimeout(timeoutId);
-		};
-	}, [term]);
+		//waits for term to be updated and runs when debouncedTerm is updated
+		search();
+	}, [debouncedTerm]);
 
 	const renderedResults = results.map((result) => {
 		return (
