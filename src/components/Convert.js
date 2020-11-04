@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import config from '../config/config';
 import APIKEY from '../config/config';
 
 const Convert = ({ language, text }) => {
@@ -25,7 +24,7 @@ const Convert = ({ language, text }) => {
 				{},
 				{
 					params: {
-						q: text,
+						q: debouncedText,
 						target: language.value,
 						key: APIKEY.translate,
 					},
@@ -34,7 +33,7 @@ const Convert = ({ language, text }) => {
 			setTranslated(data.data.translations[0].translatedText);
 		};
 		doTranslation();
-	}, [language, text]);
+	}, [language, debouncedText]);
 
 	return (
 		<div>
