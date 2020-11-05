@@ -7,7 +7,7 @@ const window = new JSDOM('').window;
 const DOMPurify = createDOMPurify(window);
 
 const Search = () => {
-	const [term, setTerm] = useState('');
+	const [term, setTerm] = useState('programming');
 	const [debouncedTerm, setDebouncedTerm] = useState(term);
 	const [results, setResults] = useState([]);
 
